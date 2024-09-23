@@ -1,7 +1,11 @@
+import Counter from "./Counter"
+import './index.css'
 
 const App = () => {
   return (
-    <div>App</div>
+    <>
+    <Counter>{(n:number)=><>Counter: {n}</>}</Counter>
+    </>
   )
 }
 
