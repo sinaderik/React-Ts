@@ -1,4 +1,4 @@
-import { KeyboardEvent, MouseEvent, useCallback, useEffect, useMemo, useState } from "react"
+import { KeyboardEvent, MouseEvent, useCallback, useEffect, useMemo, useState,useRef } from "react"
 interface Users {
   id: number,
   username: string
@@ -8,6 +8,10 @@ type Fibonacci = (n: number) => number
 const App = () => {
   const [count, setCount] = useState<number>(0)
   const [users, setUsers] = useState<Users[] | null>(null)
+
+  const inputRef=useRef<HTMLInputElement>(null)
+ 
+  console.log(inputRef?.current?.value)
 
   useEffect(() => {
     console.log('mount')
@@ -27,12 +31,13 @@ const App = () => {
 
   const fibonacciNumber = 39
   const result: number = useMemo<number>(() => fibonacci(fibonacciNumber), [fibonacciNumber])
-  
+
   return (
     <>
       <h1>{count}</h1>
       <button onClick={countPlusTwo}>+ 2</button>
       <h2>Fibonacci result: {result}</h2>
+      <input ref={inputRef} type="text" />
     </>
   )
 }
