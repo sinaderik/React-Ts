@@ -1,4 +1,4 @@
-import { ChangeEvent, createContext, ReactElement, useReducer } from "react";
+import { ChangeEvent, createContext, ReactElement, useCallback, useReducer } from "react";
 
 const enum REDUCER_ACTION_TYPE {
     INCREMENT,
@@ -33,16 +33,16 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
 const useCounterContex = (initialState: StateType) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    const increment = () => dispatch({ type: REDUCER_ACTION_TYPE.INCREMENT })
-    const decrement = () => dispatch({ type: REDUCER_ACTION_TYPE.DECREMENT })
+    const increment = useCallback(() => dispatch({ type: REDUCER_ACTION_TYPE.INCREMENT }),[])
+    const decrement = useCallback(() => dispatch({ type: REDUCER_ACTION_TYPE.DECREMENT }),[])
 
-    const handleTextInput = (event: ChangeEvent<HTMLInputElement>): void => {
+    const handleTextInput = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
         event.preventDefault()
         dispatch({
             type: REDUCER_ACTION_TYPE.NEW_INPUT,
             payload: event.target.value,
         })
-    }
+    },[])
 
     return { state, increment, decrement, handleTextInput }
 }
