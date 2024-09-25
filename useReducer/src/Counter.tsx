@@ -1,4 +1,5 @@
-import { ChangeEvent, ReactNode, useReducer } from "react"
+import { ReactNode } from "react"
+import { useCounter, useCounterText } from "./context/CounterContext"
 
 
 type Children = {
@@ -8,15 +9,16 @@ type Children = {
 
 const Counter = ({ children }: Children) => {
     // const [count, setCount] = useState<number>(0)
-   
+    const { count, increment, decrement } = useCounter()
+    const { text, handleTextInput } = useCounterText()
     return (
         <>
-            <h1>{children(state.count)}</h1>
+            <h1>{children(count)}</h1>
             <div>
                 <button onClick={increment}>+</button>
                 <button onClick={decrement}>-</button>
             </div>
-            <input onChange={handleTextInput} value={state.text} type="text" />
+            <input onChange={handleTextInput} value={text} type="text" />
         </>
     )
 }
