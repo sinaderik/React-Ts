@@ -23,7 +23,7 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         case REDUCER_ACTION_TYPE.DECREMENT:
             return { ...state, count: state.count - 1 }
         case REDUCER_ACTION_TYPE.NEW_INPUT:
-            // here we're saying if its undefined put an empty string
+            // here we're saying if its undefined put an empty string.
             return { ...state, text: action.payload ?? '' }
         default:
             return { ...state }
