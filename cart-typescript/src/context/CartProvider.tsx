@@ -1,4 +1,4 @@
-import { useReducer } from "react"
+import { useMemo, useReducer } from "react"
 
 const REDUCER_ACTION_TYPES = {
     ADD: 'ADD',
@@ -65,9 +65,20 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
 
 export const useCartContext = (initialCartState: CartStateType) => {
     const [state, dispatch] = useReducer(reducer, initialCartState)
+    const REDUCER_ACTIONS = useMemo(() => {
+        return REDUCER_ACTION_TYPES
+    }, [])
 
     const totalItems = state.cart.reduce((previousValue, cartItem) => previousValue + cartItem.qty, 0)
-    
+
     const totalPrice = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
-        .format(state.cart.reduce((previousValue, cartItem) => previousValue + (cartItem.qty * cartItem.price), 0))
+        .format(state.cart.reduce((previousValue, cartItem) => previousValue + (cartItem.qty * cartItem.price), 0));
+
+    const carts = state.cart.sort((a, b) => {
+        const itemA = Number(a.sku.slice(-4))
+        const itemB = Number(b.sku.slice(-4))
+        return itemA - itemB
+    })
+
+    return { dispatch, REDUCER_ACTIONS, totalItems, totalPrice, carts }
 }
