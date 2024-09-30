@@ -25,7 +25,7 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
             if (!action.payload) throw new Error('action.payload is not provided')
             const { name, price, sku } = action.payload
 
-            // return all the items that we dont want to update
+            // return all the items except the one that we want to update
             const filteredItems: CartItemType[] = state.cart.filter(item => item.sku !== sku)
 
             // return the only items that we want to update
@@ -40,7 +40,9 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
 
         }
         case REDUCER_ACTION_TYPES.REMOVE: {
-
+            const { sku } = action.payload
+            const filteredItems: CartItemType[] = state.cart.filter(item => item.sku !== sku)
+            return { ...state, cart: [...filteredItems] }
         }
         case REDUCER_ACTION_TYPES.SUBMIT: {
             return { ...state, cart: [] }
