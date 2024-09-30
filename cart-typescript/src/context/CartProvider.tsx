@@ -1,3 +1,5 @@
+import { useReducer } from "react"
+
 const REDUCER_ACTION_TYPES = {
     ADD: 'ADD',
     REMOVE: 'REMOVE',
@@ -45,7 +47,7 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
             const filteredItems: CartItemType[] = state.cart.filter(item => item.sku !== sku)
             const updatedItem: CartItemType = { ...existingItem, qty }
 
-            return{...state,cart:[...filteredItems,updatedItem]}
+            return { ...state, cart: [...filteredItems, updatedItem] }
         }
         case REDUCER_ACTION_TYPES.REMOVE: {
             const { sku } = action.payload
@@ -59,4 +61,13 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
             return state
         }
     }
+}
+
+export const useCartContext = (initialCartState: CartStateType) => {
+    const [state, dispatch] = useReducer(reducer, initialCartState)
+
+    const totalItems = state.cart.reduce((previousValue, cartItem) => previousValue + cartItem.qty, 0)
+    
+    const totalPrice = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+        .format(state.cart.reduce((previousValue, cartItem) => previousValue + (cartItem.qty * cartItem.price), 0))
 }
