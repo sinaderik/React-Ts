@@ -37,7 +37,15 @@ const reducer = (state: CartStateType, action: ReducerAction): CartStateType => 
             }
         }
         case REDUCER_ACTION_TYPES.QUANTITY: {
+            const { sku, qty } = action.payload
 
+            const existingItem: CartItemType | undefined = state.cart.find(item => item.sku === sku)
+            if (!existingItem) throw new Error('In order to update the item, it must exist')
+
+            const filteredItems: CartItemType[] = state.cart.filter(item => item.sku !== sku)
+            const updatedItem: CartItemType = { ...existingItem, qty }
+
+            return{...state,cart:[...filteredItems,updatedItem]}
         }
         case REDUCER_ACTION_TYPES.REMOVE: {
             const { sku } = action.payload
